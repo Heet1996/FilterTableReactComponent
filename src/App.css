@@ -1,0 +1,18 @@
+body{
+  margin:0;
+  padding:0;
+
+}
+.container
+{
+  padding: 20px 20px;
+
+}
+.red
+{
+  color:red
+}
+.productCategory
+{
+  font-weight: bold
+}
