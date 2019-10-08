@@ -12,39 +12,47 @@ let products = [
 ];
 let productsCategory={};
 products.forEach(product=>{
-        let category=product.category;
+        let category=product.category;  
         delete product.category;
         if(!productsCategory[category]) productsCategory[category]=[];
         productsCategory[category].push(product);
 });
 
-let Aux=(props)=>props.children;
+
 let ProductCategoryRow=(props)=>{
     
   return(
-    <tr key={props.product} className="productCategory">{props.product}</tr>
+    <tr key={props.category} className="productCategory">{props.category}</tr>
     );
 }
 let ProductRow=(props)=>{
- 
-  return (productsCategory[props.product]
-            .map(
-              (
-                {price,stocked,name})=>
-                 (
-                  <tr key={price+Math.random().toFixed(3)}>
-                    <td className={stocked?'red':null}>{name}</td>
-                    <td>{price}</td>
-                  </tr>
-                  )
-                
-              )
-  )
+    return(
+      <tr>
+        <td>{props.product.name}</td>
+        <td>{props.product.price}</td>
+      </tr>
+    );
+
 }
 class ProductFilterTable extends Component
 {
+  
+  
   render()
-  {
+  { let rows=[];
+    let filterText=this.props.input;
+    Object
+    .keys(productsCategory)
+    .forEach((key)=>{
+      rows.push(<ProductCategoryRow key={key} category={key}/>);
+      let length=rows.length;
+      productsCategory[key].forEach((product)=>{
+        if(product.name.indexOf(filterText.trim())===-1) return;
+        if(this.props.checked && !product.stocked)  return;
+        rows.push(<ProductRow key={product.name} product={product}/>)
+      })
+      if(rows.length===length) rows.pop();
+    })
     return (
       <table>
         <thead>
@@ -54,10 +62,7 @@ class ProductFilterTable extends Component
           </tr>
         </thead>
         <tbody>
-          {Object.keys(productsCategory)
-                 .map((product,index)=> (<Aux key={index}><ProductCategoryRow product={product} /><ProductRow product={product}/></Aux>)) 
-          }
-          
+          {rows}
         </tbody>
       </table>
     )
@@ -103,6 +108,8 @@ class FilterDataTable extends Component
            onChecked={this.onChecked} 
           />
           <ProductFilterTable
+          checked={this.state.checked}
+          input={this.state.input}
           />
 
       </div>)

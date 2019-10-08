@@ -12,6 +12,10 @@ body{
 {
   color:red
 }
+.visibility
+{
+  visibility: hidden;
+}
 .productCategory
 {
   font-weight: bold
